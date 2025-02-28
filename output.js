@@ -1,750 +1,715 @@
-//Wed Feb 12 2025 01:11:42 GMT+0000 (Coordinated Universal Time)
+//Fri Feb 28 2025 14:51:41 GMT+0000 (Coordinated Universal Time)
 //Base:https://github.com/echo094/decode-js
 //Modify:https://github.com/smallfawn/decode_action
-const r = require("axios");
-class Z {
-  constructor(G = null, o = null, U = null) {
-    const Q = {
-      token: G,
-      deviceid: o,
-      uid: U
+const $ = new Env("\u96E8\u4E91");
+const users = process.env["rainyun"].split("\n");
+class MainProgram {
+  constructor(user, index) {
+    this.user = user;
+    let t = user.split("#");
+    this.userName = t[0];
+    this.password = t[1];
+    this.index = index;
+    this.headers = {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      "x-csrf-token": "undefined",
+      "origin": "https://app.rainyun.com",
+      "referer": "https://app.rainyun.com/",
+      "accept-language": "zh-CN,zh;q=0.9"
     };
-    this.data = Q;
   }
-  get(t, G = null) {
-    return this.data.hasOwnProperty(t) ? this.data[t] : G;
+  log(msg) {
+    console.log(`账号[${this.index}]:${msg}`);
   }
-  set(t, G) {
-    this.data[t] = G;
-  }
-}
-const R = new Z(),
-  W = {
-    "User-Agent": "okhttp/4.12.0",
-    "Accept-Encoding": "gzip",
-    "cache-control": "no-cache",
-    token: null,
-    deviceid: null,
-    client: "app",
-    devicetype: "Android"
-  };
-function f1() {
-  const Q = {
-      ...W
-    },
-    l = Q;
-  l.token = R.get("token");
-  l.deviceid = R.get("deviceid");
-  return l;
-}
-const f2 = {
-  "User-Agent": "okhttp/4.12.0",
-  "Accept-Encoding": "gzip",
-  "cache-control": "no-cache",
-  token: null,
-  deviceid: null,
-  client: "app",
-  devicetype: "Android",
-  "content-type": "application/json; charset=UTF-8"
-};
-function f4() {
-  const Q = {
-      ...f2
-    },
-    l = Q;
-  l.token = R.get("token");
-  l.deviceid = R.get("deviceid");
-  return l;
-}
-function f7() {
-  const Q = {
-      ...W
-    },
-    l = Q;
-  l.token = R.get("token");
-  l.deviceid = R.get("deviceid");
-  return l;
-}
-let f8 = null;
-async function f9(t) {
-  const o = t.isDone || 0;
-  console.log("----新用户每天可领0.3现金----");
-  const U = true;
-  if (U === o) {
-    console.log("任务已完成✅");
-  } else {
-    console.log("任务未完成❌");
-    console.log("去完成任务");
-    const l = Math.floor(Math.random() * 26) + 45;
-    console.log("随机延迟" + l + "秒后完成任务");
-    await fG(l * 1000);
-    await ff();
-  }
-}
-async function ff() {
-  const G = "https://new.tianjinzhitongdaohe.com/api/v1/app/welfare/newUserSeven";
-  const o = f1();
-  try {
-    const U = await fetch(G, {
-        method: "POST",
-        headers: o
-      }),
-      Q = await U.json();
-    if (Q.code === 200) {
-      const d = Q.data;
-      console.log("领取成功✅，获得" + d + "元");
-    } else {
-      console.log("领取失败❌，错误信息:", Q.msg || "未知错误");
-    }
-  } catch (F) {
-    console.error("请求失败❌，错误信息:", F.message);
-  }
-}
-async function fb(t) {
-  let o = t.extraProgress === 0 ? 7 : t.extraProgress,
-    U = t.taskList || [];
-  let Q = U.find(F => F.number === o) || {},
-    l = Q.isDone || false,
-    q = Q.rewardNum || 0,
-    A = true;
-  console.log("----每日签到----");
-  console.log("进度: 周" + o + " 奖励: " + q + "金币");
-  if (l === A) {
-    console.log("任务已完成✅");
-  } else {
-    console.log("任务未完成❌");
-    console.log("去完成任务");
-    const k = Math.floor(Math.random() * 26) + 45;
-    console.log("随机延迟" + k + "秒后完成任务");
-    await fG(k * 1000);
-    await fe();
-  }
-}
-async function fe() {
-  const G = "https://new.tianjinzhitongdaohe.com/api/v1/app/welfare/sign",
-    o = f1();
-  try {
-    const U = await fetch(G, {
-        method: "POST",
-        headers: o
-      }),
-      Q = await U.json();
-    if (Q.code === 200) {
-      const d = Q.data;
-      console.log("签到成功✅，获得" + d + "金币");
-    } else {
-      console.log("签到失败❌，错误信息:", Q.msg);
-    }
-  } catch (F) {
-    console.error("请求失败:", F);
-  }
-}
-function fj(G) {
-  const Q = G.extraProgress || 0,
-    l = G.taskList || [],
-    q = l.find(A => A.number === Q) || null;
-  if (q) {
-    const F = q.isDone || 0,
-      T = q.rewardNum || 0,
-      k = true;
-    console.log("----每周福利----");
-    console.log("进度: 周" + Q + " 奖励: " + T + "金币");
-    if (k === F) {
-      console.log("任务已完成✅");
-    } else {
-      console.log("任务未完成❌");
-    }
-  }
-}
-async function fO(t) {
-  const o = t.extraProgress || 0;
-  const U = t.extraReached || 0;
-  const Q = t.taskNum || 0;
-  console.log("----看视频领金币----");
-  console.log("进度: " + o + "/" + U);
-  if (U === o) {
-    console.log("任务已完成✅");
-  } else {
-    console.log("任务未完成❌");
-    console.log("去完成任务");
-    const d = U - o;
-    for (let q = 0; q < d; q++) {
-      fP(Q);
-      const F = Math.floor(Math.random() * 26) + 45;
-      console.log("随机延迟" + F + "秒后继续");
-      await fG(F * 1000);
-    }
-  }
-}
-async function fP(G) {
-  const U = "https://new.tianjinzhitongdaohe.com/api/v1/app/welfare/watchAd",
-    Q = {
-      adId: G
-    };
-  const d = f4();
-  try {
-    const q = await fetch(U, {
-        method: "POST",
-        headers: d,
-        body: JSON.stringify(Q)
-      }),
-      A = await q.json();
-    if (A.code === 200) {
-      const F = A.data;
-      console.log("看视频领金币成功✅，获得" + F + "金币");
-    } else {
-      console.log("看视频领金币失败❌，错误信息:", A.msg);
-      process.exit();
-    }
-  } catch (M) {
-    console.error("请求失败:", M);
-  }
-}
-async function ft(t) {
-  const o = t.extraProgress || 0;
-  const U = t.extraReached || 0;
-  console.log("----看短剧领金币----");
-  console.log("进度: " + o + "/" + U + "分钟");
-  if (o >= U) {
-    console.log("任务已完成✅");
-  } else {
-    console.log("任务未完成❌");
-    console.log("去完成任务");
-    await fJ();
-    kid = fu[0];
-    const q = await fv(kid);
-    let A = kid,
-      F = q[0],
-      T = U - o,
-      v = T * 60,
-      M = 1,
-      L = 0,
-      x = 0,
-      u = 0;
-    while (L < v) {
-      const J = Math.floor(Math.random() * 21) + 40;
-      if (L + J >= v) {
-        console.log("----模拟看剧中----");
-      }
-      await fk(J, A, M);
-      L += J;
-      const w = v - L;
-      console.log("进度: 总观看时长: " + L + " 秒, 剩余观看时长: " + w + " 秒");
-      const c = Math.floor(Math.random() * 15) + 70;
-      console.log("等待 " + c + " 秒后继续看剧");
-      await fG(c * 1000);
-      M += 1;
-      x += 1;
-      u += 1;
-      if (F === u) {
-        M = 1;
-        u = 0;
-        await fJ();
-        let N = 0;
-        N += 1;
-        if (N < fu.length) {
-          kid = fu[N];
-        } else {
-          console.log("没有更多的短剧ID可供切换");
-          break;
-        }
-        const B = fv(kid);
-        F = B[0];
-        A = kid;
-      }
-      if (x === 20) {
-        x = 0;
-        const I = Math.floor(Math.random() * 31) + 300;
-        console.log("----⚠️防止IP被封置顶⚠️----");
-        console.log("已观看" + L + "秒,随机延迟" + I + "秒后继续");
-        await fG(I * 1000);
-      }
-      if (L >= v) {
-        console.log("看剧完成✅");
-        break;
-      }
-    }
-  }
-}
-function fG(t) {
-  return new Promise(G => setTimeout(G, t));
-}
-function fo(G) {
-  const Q = G.taskList || [],
-    l = Q.find(q => q.number !== undefined) || null;
-  if (l) {
-    const q = l.isDone || 0,
-      A = true;
-    console.log("----吃饭看剧补贴----");
-    if (A === q) {
-      console.log("任务已完成✅");
-    } else {
-      console.log("任务未完成❌");
-    }
-  }
-}
-async function fU(t) {
-  const o = t.extraProgress || 0;
-  const U = t.extraReached || 0;
-  const Q = t.isDone || 0;
-  console.log("----点赞剧集----");
-  console.log("进度: " + o + "/" + U);
-  const l = true;
-  if (l === Q) {
-    console.log("任务已完成✅");
-  } else {
-    console.log("任务未完成❌");
-    console.log("去完成任务");
-    await fJ();
-    const A = Math.floor(Math.random() * 40);
-    kid = fu[A];
-    const F = await fv(kid),
-      T = U - o;
-    d1 = F[1];
-    for (let v = 0; v < T; v++) {
-      const m = "点赞",
-        L = 1;
-      await fQ(d1, L, m);
-      const x = Math.floor(Math.random() * 26) + 45;
-      console.log("随机延迟" + x + "秒后继续");
-      await fG(x * 1000);
-      d1 += 1;
-    }
-    d1 = F[1];
-    for (let u = 0; u < T; u++) {
-      const w = "取消点赞",
-        s = 0;
-      await fQ(d1, s, w);
-      const N = Math.floor(Math.random() * 26) + 45;
-      console.log("随机延迟" + N + "秒后继续");
-      await fG(N * 1000);
-      d1 += 1;
-    }
-  }
-}
-async function fQ(G, o, U) {
-  const l = "https://new.tianjinzhitongdaohe.com/api/v1/app/play/praiseMovie";
-  const d = {
-    action: o,
-    episodeIndex: 0,
-    movieId: G,
-    source: 0,
-    typeId: "S1"
-  };
-  const A = f4();
-  try {
-    const T = await fetch(l, {
-        method: "POST",
-        headers: A,
-        body: JSON.stringify(d)
-      }),
-      k = await T.json();
-    k.code === 200 ? console.log(U + "成功✅") : console.log(U + "失败❌，错误信息:", k.msg);
-  } catch (m) {
-    console.error("请求失败:", m);
-  }
-}
-async function fl(t) {
-  const o = t.extraProgress || 0;
-  const U = t.extraReached || 0,
-    Q = t.isDone || 0;
-  console.log("----收藏剧集----");
-  console.log("进度: " + o + "/" + U);
-  const l = true;
-  if (l === Q) {
-    console.log("任务已完成✅");
-  } else {
-    console.log("任务未完成❌");
-    console.log("去完成任务");
-    await fJ();
-    const A = Math.floor(Math.random() * 40);
-    kid = fu[A];
-    const F = await fv(kid),
-      T = U - o;
-    d1 = F[1];
-    for (let v = 0; v < T; v++) {
-      const M = "收藏",
-        m = 1;
-      fd(d1, m, M);
-      const L = Math.floor(Math.random() * 26) + 45;
-      console.log("随机延迟" + L + "秒后继续");
-      await fG(L * 1000);
-      d1 += 1;
-    }
-    d1 = F[1];
-    for (let u = 0; u < T; u++) {
-      const w = "取消收藏",
-        s = 0;
-      await fd(d1, s, w);
-      const N = Math.floor(Math.random() * 26) + 45;
-      console.log("随机延迟" + N + "秒后继续");
-      await fG(N * 1000);
-      d1 += 1;
-    }
-  }
-}
-async function fd(G, o, U) {
-  const l = "https://new.tianjinzhitongdaohe.com/api/v1/app/play/collectMovie",
-    d = {
-      action: o,
-      id: G,
-      source: 0,
-      typeId: "S1"
-    };
-  const A = f4();
-  try {
-    const T = await fetch(l, {
-        method: "POST",
-        headers: A,
-        body: JSON.stringify(d)
-      }),
-      k = await T.json();
-    if (k.code === 200) {
-      console.log(U + "成功✅");
-    } else {
-      console.log(U + "失败❌，错误信息:", k.msg);
-    }
-  } catch (m) {
-    console.error("请求失败:", m);
-  }
-}
-async function fq(t) {
-  const o = t.extraProgress || 0;
-  const U = t.extraReached || 0;
-  const Q = t.isDone || 0;
-  console.log("----分享剧集----");
-  console.log("进度: " + o + "/" + U);
-  const l = true;
-  if (l === Q) {
-    console.log("任务已完成✅");
-  } else {
-    console.log("任务未完成❌");
-    console.log("去完成任务");
-    await fJ();
-    const A = Math.floor(Math.random() * 40);
-    kid = fu[A];
-    const F = await fv(kid),
-      T = U - o;
-    d1 = F[1];
-    for (let v = 0; v < T; v++) {
-      fA(d1);
-      const M = Math.floor(Math.random() * 26) + 45;
-      console.log("随机延迟" + M + "秒后继续");
-      await fG(M * 1000);
-      d1 += 1;
-    }
-  }
-}
-async function fA(G) {
-  const U = "https://new.tianjinzhitongdaohe.com/api/v1/app/welfare/addShare";
-  const Q = {
-    typeId: "S1",
-    movieId: "" + G
-  };
-  const d = f1();
-  try {
-    const A = await fetch(U, {
-        method: "POST",
-        headers: d,
-        body: new URLSearchParams(Q)
-      }),
-      F = await A.json();
-    F.code === 200 ? console.log("分享成功✅") : console.log("分享失败❌，错误信息:", F.msg);
-  } catch (v) {
-    console.error("请求失败:", v);
-  }
-}
-function fF(G) {
-  const Q = G.isDone || 0;
-  console.log("----首次完善个人资料----");
-  const l = true;
-  if (l === Q) {
-    console.log("任务已完成✅");
-  } else {
-    console.log("任务未完成❌");
-  }
-}
-async function fT(t) {
-  const o = t.extraProgress || 0;
-  const U = t.extraReached || 0;
-  const Q = t.shortList || [],
-    d = Q.length > 0 ? Q[0].id : null;
-  console.log("----热播好剧领金币----");
-  console.log("进度: " + o + "/" + U + "分钟");
-  if (U === o) {
-    console.log("任务已完成✅");
-  } else {
-    console.log("任务未完成❌");
-    console.log("去完成任务");
-    const A = U - o,
-      F = A * 60;
-    let T = 1,
-      k = 0,
-      v = 0;
-    while (k < F) {
-      const M = Math.floor(Math.random() * 21) + 40;
-      k + M >= F && console.log("----模拟看剧中----");
-      await fk(M, d, T);
-      k += M;
-      const m = F - k;
-      console.log("进度: 总观看时长: " + k + " 秒, 剩余观看时长: " + m + " 秒");
-      const L = Math.floor(Math.random() * 11) + 70;
-      console.log("等待 " + L + " 秒后继续看剧");
-      await fG(L * 1000);
-      v += 1;
-      T += 1;
-      if (k >= F) {
-        console.log("看剧完成✅");
-        break;
-      }
-      if (v === 9) {
-        v = 0;
-        const J = Math.floor(Math.random() * 11) + 600;
-        console.log("----⚠️防止IP被封置顶⚠️----");
-        console.log("已观看" + k + "秒,随机延迟" + J + "秒后继续");
-        await fG(J * 1000);
-      }
-    }
-  }
-}
-async function fk(G, o, U) {
-  const l = "https://new.tianjinzhitongdaohe.com/api/v1/app/play/historyMovie",
-    d = {
-      episode: "第" + U + "集",
-      id: o,
-      playerId: 0,
-      typeId: "S1",
-      watchDuration: G
-    };
-  const A = f4();
-  try {
-    const T = await fetch(l, {
-        method: "POST",
-        headers: A,
-        body: JSON.stringify(d)
-      }),
-      k = await T.json();
-    if (k.code === 200) {
-      console.log("看剧成功✅,模拟观看" + G + "秒");
-    } else {
-      console.log("看剧失败❌，错误信息:", k.msg);
-      process.exit();
-    }
-  } catch (m) {
-    console.error("请求失败:", m);
-  }
-}
-async function fv(G) {
-  f8 = R.get("uid");
-  const U = "https://new.tianjinzhitongdaohe.com/api/v1/app/play/movieDetails",
-    Q = {
-      id: G,
-      source: 0,
-      typeId: "S1",
-      userId: f8
-    };
-  const d = f4();
-  try {
-    const A = await fetch(U, {
-        method: "POST",
-        headers: d,
-        body: JSON.stringify(Q)
-      }),
-      F = await A.json();
-    if (F.code === 200) {
-      const k = F.data || {},
-        v = k.totalEpisode || 0,
-        M = k.currentEpisode || {},
-        m = M.id || 0;
-      return [v, m];
-    } else {
-      console.log("获取短剧详细信息失败❌，错误信息:", F.msg);
-      return [0, 0];
-    }
-  } catch (x) {
-    console.error("请求失败:", x);
-    return [0, 0];
-  }
-}
-const fM = {
-  "2": f9,
-  "3": fb,
-  "4": fj,
-  "5": fO,
-  "6": ft,
-  "7": fo,
-  "8": fU,
-  "9": fl,
-  "10": fq,
-  "11": fF,
-  "14": fT
-};
-async function fL() {
-  const G = "https://new.tianjinzhitongdaohe.com/api/v1/app/user/userInfo";
-  const o = f1();
-  const U = await fetch(G, {
-    method: "GET",
-    headers: o
-  });
-  if (!U.ok) {
-    throw new Error("HTTP error! Status: " + U.status);
-  }
-  const Q = await U.json();
-  if (Q.code === 200) {
-    console.log("登录成功✅");
-    const d = Q.data || {},
-      q = d.id || 0;
-    R.set("uid", q);
-    await fx();
-    console.log("----资产查询----");
-    await fw();
-  } else {
-    console.log("登录失败❌，token已失效 消息:", Q.msg);
-    process.exit();
-  }
-}
-async function fx() {
-  const o = "https://new.tianjinzhitongdaohe.com/api/v1/app/welfare/list",
-    U = f7(),
-    Q = {
-      headers: U
-    };
-  const l = await r.post(o, {}, Q);
-  const d = l.data;
-  if (d.code === 200) {
-    for (const A of d.data) {
-      const T = A.id;
-      if (fM[T]) {
-        await fM[T](A);
-      }
-    }
-  } else {
-    console.log("请求失败，错误信息:", d.msg);
-  }
-}
-let fu = [];
-async function fJ() {
-  const U = "https://new.tianjinzhitongdaohe.com/api/v1/app/screen/screenMovie",
-    Q = {
-      typeId: "S1"
-    };
-  const l = {
-    condition: Q,
-    pageNum: 1,
-    pageSize: 40
-  };
-  const q = f4();
-  try {
-    const A = await fetch(U, {
-        method: "POST",
-        headers: q,
-        body: JSON.stringify(l)
-      }),
-      F = await A.json();
-    if (F.code === 200) {
-      const k = F.data && F.data.records || [];
-      fu.length = 0;
-      k.forEach(v => {
-        const L = v.id;
-        if (L != null) {
-          fu.push(L);
-        } else {
-          console.log("当前记录没有id:", v);
-        }
-      });
-    } else {
-      console.log("剧集列表获取失败❌，错误信息:", F.msg);
-      process.exit();
-    }
-  } catch (m) {
-    console.error("请求失败:", m);
-  }
-}
-async function fw() {
-  const G = "https://new.tianjinzhitongdaohe.com/api/v1/app/user/userInfo",
-    o = f1();
-  try {
-    const U = await fetch(G, {
-      method: "GET",
-      headers: o
+  async login() {
+    let url = "https://api.v2.rainyun.com/user/login";
+    let body = JSON.stringify({
+      "field": this.userName,
+      "password": this.password
     });
-    if (!U.ok) {
-      throw new Error("HTTP error! Status: " + U.status);
+    let headers = this.headers;
+    let response = await post({
+      url,
+      body,
+      headers
+    });
+    let cookies = response.headers["set-cookie"];
+    response = JSON.parse(response.body);
+    if (response.code === 10004) {
+      this.log(response.message);
+      return await this.icon_login();
     }
-    const Q = await U.json();
-    if (Q.code === 200) {
-      const d = Q.data || {},
-        q = d.goldBalance || 0,
-        A = d.balance || 0;
-      console.log("今日金币: " + q);
-      console.log("总余额: " + A);
-      process.exit();
+    if (response.code !== 200) {
+      throw new Error(response.message);
+    }
+    this.headers["x-csrf-token"] = /X-CSRF-Token=(\S+);/.exec(cookies.find(c => c.includes("X-CSRF-Token")))[1];
+    this.log("\u767B\u5F55\u6210\u529F");
+  }
+  async icon_login() {
+    let r = await this.icon();
+    let url = "https://api.v2.rainyun.com/user/login";
+    let body = JSON.stringify({
+      "field": this.userName,
+      "password": this.password,
+      "vticket": r.ticket,
+      "vrandstr": r.randstr
+    });
+    let headers = this.headers;
+    let response = await post({
+      url,
+      body,
+      headers
+    });
+    let cookies = response.headers["set-cookie"];
+    response = JSON.parse(response.body);
+    if (response.code !== 200) {
+      throw new Error(response.message);
+    }
+    this.headers["x-csrf-token"] = /X-CSRF-Token=(\S+);/.exec(cookies.find(c => c.includes("X-CSRF-Token")))[1];
+    this.log("\u767B\u5F55\u6210\u529F");
+  }
+  async icon() {
+    let url = "http://47.101.43.3:10190/tx";
+    let response = await get({
+      url
+    });
+    return JSON.parse(response.body);
+  }
+  async signIn() {
+    let r = await this.icon();
+    let url = "https://api.v2.rainyun.com/user/reward/tasks";
+    let body = JSON.stringify({
+      "task_name": "\u6BCF\u65E5\u7B7E\u5230",
+      "verifyCode": "",
+      "vticket": r.ticket,
+      "vrandstr": r.randstr
+    });
+    let headers = this.headers;
+    let response = JSON.parse((await post({
+      url,
+      body,
+      headers
+    })).body);
+    if (response.code === 200) {
+      this.log("\u7B7E\u5230\u6210\u529F");
     } else {
-      console.log("资产查询失败❌，token已失效 消息:", Q.msg);
-      process.exit();
+      this.log(response.message);
     }
-  } catch (k) {
-    console.log("请求发生错误:", k);
+  }
+  async sign_info() {
+    let url = "https://api.v2.rainyun.com/user/reward/tasks";
+    let headers = this.headers;
+    let response = JSON.parse((await get({
+      url,
+      headers
+    })).body);
+    if (response.data.find(c => c.Name === "\u6BCF\u65E5\u7B7E\u5230").Status == 2) {
+      this.log("\u4ECA\u65E5\u5DF2\u7B7E\u5230");
+    } else {
+      await this.signIn();
+    }
+  }
+  async doTask() {
+    try {
+      await this.login();
+      await this.sign_info();
+    } catch (e) {
+      this.log(e);
+    }
   }
 }
-async function fc() {
-  console.log("--------------------------------------");
-  const G = "http://182.43.26.148:527/view";
-  try {
-    const o = await fetch(G);
-    if (!o.ok) {
-      throw new Error("HTTP error! Status: " + o.status);
-    }
-    const U = await o.json();
-    if (U.gb === "false") {
-      const Q = U.requestCount || "公告内容未设置";
-      console.log("🌟系统通知：");
-      console.log("全网启动次数已达 " + Q + " 次");
-      return Q;
-    } else {
-      console.log("该脚本已停用，请更新至最新版本");
-    }
-  } catch (l) {
-    l.name === "TypeError" ? console.log("无法连接服务器") : console.log("响应内容无法解析为JSON");
+async function main() {
+  for (let index = 0; index < users.length; index++) {
+    await new MainProgram(users[index], index + 1).doTask();
+    await $.wait(2);
   }
 }
-async function fs() {
-  const G = new Date();
-  const o = G.getFullYear(),
-    U = String(G.getMonth() + 1).padStart(2, "0"),
-    Q = String(G.getDate()).padStart(2, "0"),
-    l = String(G.getHours()).padStart(2, "0"),
-    d = String(G.getMinutes()).padStart(2, "0"),
-    q = String(G.getSeconds()).padStart(2, "0"),
-    A = o + "-" + U + "-" + Q + " " + l + ":" + d + ":" + q,
-    F = await fc();
-  if (F) {
-    console.log("当前时间：" + A);
-    console.log("如有bug反馈 请联系作者");
-    console.log("QQ：3620651465");
-    console.log("电报：https://t.me/ByteCody");
-    console.log("--------------------------------------");
-  } else {
-    console.log("当前时间：" + A);
-    console.log("如有bug反馈 请联系作者");
-    console.log("QQ：3620651465");
-    console.log("电报：https://t.me/ByteCody");
-    console.log("--------------------------------------");
-    process.exit();
-  }
-  const T = process.env.nnck;
-  !T && (console.log("请设置 nnck 环境变量"), process.exit());
-  const k = T.split("@");
-  k.length === 0 && (console.log("nnck 环境变量为空或格式错误"), process.exit());
-  k.forEach((x, u) => {
-    const J = "账号" + (u + 1);
-    !x.includes("&") && (console.log("账号" + (u + 1) + "格式错误，缺少 '&' 分隔符"), process.exit());
-    const [w, c] = x.split("&");
-    (!w || !c) && (console.log("账号" + (u + 1) + "缺少 token 或 deviceid，请检查格式"), process.exit());
-    R.set("token", w);
-    R.set("deviceid", c);
-    console.log("\n开始运行 " + J + " 使用的 token: " + w + "，deviceid: " + c);
-    fL();
+!(async () => {
+  await main();
+})().catch(e => {
+  console.log(e);
+}).finally(() => $.done());
+
+// prettier-ignore
+function get(options) {
+  return new Promise((resolve, reject) => {
+    $.get(options, (err, resp, body) => {
+      resolve(resp);
+    });
   });
 }
-fs();
+function post(options) {
+  return new Promise((resolve, reject) => {
+    $.post(options, (err, resp, body) => {
+      resolve(resp);
+    });
+  });
+}
+function Env(t, e) {
+  class s {
+    constructor(t) {
+      this.env = t;
+    }
+    send(t, e = "GET") {
+      t = "string" == typeof t ? {
+        url: t
+      } : t;
+      let s = this.get;
+      "POST" === e && (s = this.post);
+      const i = new Promise((e, i) => {
+        s.call(this, t, (t, s, o) => {
+          t ? i(t) : e(s);
+        });
+      });
+      return t.timeout ? ((t, e = 1000) => Promise.race([t, new Promise((t, s) => {
+        setTimeout(() => {
+          s(new Error("\u8BF7\u6C42\u8D85\u65F6"));
+        }, e);
+      })]))(i, t.timeout) : i;
+    }
+    get(t) {
+      return this.send.call(this.env, t);
+    }
+    post(t) {
+      return this.send.call(this.env, t, "POST");
+    }
+  }
+  return new class {
+    constructor(t, e) {
+      this.logLevels = {
+        debug: 0,
+        info: 1,
+        warn: 2,
+        error: 3
+      }, this.logLevelPrefixs = {
+        debug: "[DEBUG] ",
+        info: "[INFO] ",
+        warn: "[WARN] ",
+        error: "[ERROR] "
+      }, this.logLevel = "info", this.name = t, this.http = new s(this), this.data = null, this.dataFile = "box.dat", this.logs = [], this.isMute = !1, this.isNeedRewrite = !1, this.logSeparator = "\n", this.encoding = "utf-8", this.startTime = new Date().getTime(), Object.assign(this, e), this.log("", `🔔${this.name}, 开始!`);
+    }
+    getEnv() {
+      return "undefined" != typeof $environment && $environment["surge-version"] ? "Surge" : "undefined" != typeof $environment && $environment["stash-version"] ? "Stash" : "undefined" != typeof module && module.exports ? "Node.js" : "undefined" != typeof $task ? "Quantumult X" : "undefined" != typeof $loon ? "Loon" : "undefined" != typeof $rocket ? "Shadowrocket" : void 0;
+    }
+    isNode() {
+      return "Node.js" === this.getEnv();
+    }
+    isQuanX() {
+      return "Quantumult X" === this.getEnv();
+    }
+    isSurge() {
+      return "Surge" === this.getEnv();
+    }
+    isLoon() {
+      return "Loon" === this.getEnv();
+    }
+    isShadowrocket() {
+      return "Shadowrocket" === this.getEnv();
+    }
+    isStash() {
+      return "Stash" === this.getEnv();
+    }
+    toObj(t, e = null) {
+      try {
+        return JSON.parse(t);
+      } catch {
+        return e;
+      }
+    }
+    toStr(t, e = null, ...s) {
+      try {
+        return JSON.stringify(t, ...s);
+      } catch {
+        return e;
+      }
+    }
+    getjson(t, e) {
+      let s = e;
+      if (this.getdata(t)) try {
+        s = JSON.parse(this.getdata(t));
+      } catch {}
+      return s;
+    }
+    setjson(t, e) {
+      try {
+        return this.setdata(JSON.stringify(t), e);
+      } catch {
+        return !1;
+      }
+    }
+    getScript(t) {
+      return new Promise(e => {
+        this.get({
+          url: t
+        }, (t, s, i) => e(i));
+      });
+    }
+    runScript(t, e) {
+      return new Promise(s => {
+        let i = this.getdata("@chavy_boxjs_userCfgs.httpapi");
+        i = i ? i.replace(/\n/g, "").trim() : i;
+        let o = this.getdata("@chavy_boxjs_userCfgs.httpapi_timeout");
+        o = o ? 1 * o : 20, o = e && e.timeout ? e.timeout : o;
+        const [r, a] = i.split("@"),
+          n = {
+            url: `http://${a}/v1/scripting/evaluate`,
+            body: {
+              script_text: t,
+              mock_type: "cron",
+              timeout: o
+            },
+            headers: {
+              "X-Key": r,
+              Accept: "*/*"
+            },
+            policy: "DIRECT",
+            timeout: o
+          };
+        this.post(n, (t, e, i) => s(i));
+      }).catch(t => this.logErr(t));
+    }
+    loaddata() {
+      if (!this.isNode()) return {};
+      {
+        this.fs = this.fs ? this.fs : require("fs"), this.path = this.path ? this.path : require("path");
+        const t = this.path.resolve(this.dataFile),
+          e = this.path.resolve(process.cwd(), this.dataFile),
+          s = this.fs.existsSync(t),
+          i = !s && this.fs.existsSync(e);
+        if (!s && !i) return {};
+        {
+          const i = s ? t : e;
+          try {
+            return JSON.parse(this.fs.readFileSync(i));
+          } catch (t) {
+            return {};
+          }
+        }
+      }
+    }
+    writedata() {
+      if (this.isNode()) {
+        this.fs = this.fs ? this.fs : require("fs"), this.path = this.path ? this.path : require("path");
+        const t = this.path.resolve(this.dataFile),
+          e = this.path.resolve(process.cwd(), this.dataFile),
+          s = this.fs.existsSync(t),
+          i = !s && this.fs.existsSync(e),
+          o = JSON.stringify(this.data);
+        s ? this.fs.writeFileSync(t, o) : i ? this.fs.writeFileSync(e, o) : this.fs.writeFileSync(t, o);
+      }
+    }
+    lodash_get(t, e, s) {
+      const i = e.replace(/\[(\d+)\]/g, ".$1").split(".");
+      let o = t;
+      for (const t of i) if (o = Object(o)[t], void 0 === o) return s;
+      return o;
+    }
+    lodash_set(t, e, s) {
+      return Object(t) !== t || (Array.isArray(e) || (e = e.toString().match(/[^.[\]]+/g) || []), e.slice(0, -1).reduce((t, s, i) => Object(t[s]) === t[s] ? t[s] : t[s] = Math.abs(e[i + 1]) >> 0 == +e[i + 1] ? [] : {}, t)[e[e.length - 1]] = s), t;
+    }
+    getdata(t) {
+      let e = this.getval(t);
+      if (/^@/.test(t)) {
+        const [, s, i] = /^@(.*?)\.(.*?)$/.exec(t),
+          o = s ? this.getval(s) : "";
+        if (o) try {
+          const t = JSON.parse(o);
+          e = t ? this.lodash_get(t, i, "") : e;
+        } catch (t) {
+          e = "";
+        }
+      }
+      return e;
+    }
+    setdata(t, e) {
+      let s = !1;
+      if (/^@/.test(e)) {
+        const [, i, o] = /^@(.*?)\.(.*?)$/.exec(e),
+          r = this.getval(i),
+          a = i ? "null" === r ? null : r || "{}" : "{}";
+        try {
+          const e = JSON.parse(a);
+          this.lodash_set(e, o, t), s = this.setval(JSON.stringify(e), i);
+        } catch (e) {
+          const r = {};
+          this.lodash_set(r, o, t), s = this.setval(JSON.stringify(r), i);
+        }
+      } else s = this.setval(t, e);
+      return s;
+    }
+    getval(t) {
+      switch (this.getEnv()) {
+        case "Surge":
+        case "Loon":
+        case "Stash":
+        case "Shadowrocket":
+          return $persistentStore.read(t);
+        case "Quantumult X":
+          return $prefs.valueForKey(t);
+        case "Node.js":
+          return this.data = this.loaddata(), this.data[t];
+        default:
+          return this.data && this.data[t] || null;
+      }
+    }
+    setval(t, e) {
+      switch (this.getEnv()) {
+        case "Surge":
+        case "Loon":
+        case "Stash":
+        case "Shadowrocket":
+          return $persistentStore.write(t, e);
+        case "Quantumult X":
+          return $prefs.setValueForKey(t, e);
+        case "Node.js":
+          return this.data = this.loaddata(), this.data[e] = t, this.writedata(), !0;
+        default:
+          return this.data && this.data[e] || null;
+      }
+    }
+    initGotEnv(t) {
+      this.got = this.got ? this.got : require("got"), this.cktough = this.cktough ? this.cktough : require("tough-cookie"), this.ckjar = this.ckjar ? this.ckjar : new this.cktough.CookieJar(), t && (t.headers = t.headers ? t.headers : {}, t && (t.headers = t.headers ? t.headers : {}, void 0 === t.headers.cookie && void 0 === t.headers.Cookie && void 0 === t.cookieJar && (t.cookieJar = this.ckjar)));
+    }
+    get(t, e = () => {}) {
+      switch (t.headers && (delete t.headers["Content-Type"], delete t.headers["Content-Length"], delete t.headers["content-type"], delete t.headers["content-length"]), t.params && (t.url += "?" + this.queryStr(t.params)), void 0 === t.followRedirect || t.followRedirect || ((this.isSurge() || this.isLoon()) && (t["auto-redirect"] = !1), this.isQuanX() && (t.opts ? t.opts.redirection = !1 : t.opts = {
+        redirection: !1
+      })), this.getEnv()) {
+        case "Surge":
+        case "Loon":
+        case "Stash":
+        case "Shadowrocket":
+        default:
+          this.isSurge() && this.isNeedRewrite && (t.headers = t.headers || {}, Object.assign(t.headers, {
+            "X-Surge-Skip-Scripting": !1
+          })), $httpClient.get(t, (t, s, i) => {
+            !t && s && (s.body = i, s.statusCode = s.status ? s.status : s.statusCode, s.status = s.statusCode), e(t, s, i);
+          });
+          break;
+        case "Quantumult X":
+          this.isNeedRewrite && (t.opts = t.opts || {}, Object.assign(t.opts, {
+            hints: !1
+          })), $task.fetch(t).then(t => {
+            const {
+              statusCode: s,
+              statusCode: i,
+              headers: o,
+              body: r,
+              bodyBytes: a
+            } = t;
+            e(null, {
+              status: s,
+              statusCode: i,
+              headers: o,
+              body: r,
+              bodyBytes: a
+            }, r, a);
+          }, t => e(t && t.error || "UndefinedError"));
+          break;
+        case "Node.js":
+          let s = require("iconv-lite");
+          this.initGotEnv(t), this.got(t).on("redirect", (t, e) => {
+            try {
+              if (t.headers["set-cookie"]) {
+                const s = t.headers["set-cookie"].map(this.cktough.Cookie.parse).toString();
+                s && this.ckjar.setCookieSync(s, null), e.cookieJar = this.ckjar;
+              }
+            } catch (t) {
+              this.logErr(t);
+            }
+          }).then(t => {
+            const {
+                statusCode: i,
+                statusCode: o,
+                headers: r,
+                rawBody: a
+              } = t,
+              n = s.decode(a, this.encoding);
+            e(null, {
+              status: i,
+              statusCode: o,
+              headers: r,
+              rawBody: a,
+              body: n
+            }, n);
+          }, t => {
+            const {
+              message: i,
+              response: o
+            } = t;
+            e(i, o, o && s.decode(o.rawBody, this.encoding));
+          });
+          break;
+      }
+    }
+    post(t, e = () => {}) {
+      const s = t.method ? t.method.toLocaleLowerCase() : "post";
+      switch (t.body && t.headers && !t.headers["Content-Type"] && !t.headers["content-type"] && (t.headers["content-type"] = "application/x-www-form-urlencoded"), t.headers && (delete t.headers["Content-Length"], delete t.headers["content-length"]), void 0 === t.followRedirect || t.followRedirect || ((this.isSurge() || this.isLoon()) && (t["auto-redirect"] = !1), this.isQuanX() && (t.opts ? t.opts.redirection = !1 : t.opts = {
+        redirection: !1
+      })), this.getEnv()) {
+        case "Surge":
+        case "Loon":
+        case "Stash":
+        case "Shadowrocket":
+        default:
+          this.isSurge() && this.isNeedRewrite && (t.headers = t.headers || {}, Object.assign(t.headers, {
+            "X-Surge-Skip-Scripting": !1
+          })), $httpClient[s](t, (t, s, i) => {
+            !t && s && (s.body = i, s.statusCode = s.status ? s.status : s.statusCode, s.status = s.statusCode), e(t, s, i);
+          });
+          break;
+        case "Quantumult X":
+          t.method = s, this.isNeedRewrite && (t.opts = t.opts || {}, Object.assign(t.opts, {
+            hints: !1
+          })), $task.fetch(t).then(t => {
+            const {
+              statusCode: s,
+              statusCode: i,
+              headers: o,
+              body: r,
+              bodyBytes: a
+            } = t;
+            e(null, {
+              status: s,
+              statusCode: i,
+              headers: o,
+              body: r,
+              bodyBytes: a
+            }, r, a);
+          }, t => e(t && t.error || "UndefinedError"));
+          break;
+        case "Node.js":
+          let i = require("iconv-lite");
+          this.initGotEnv(t);
+          const {
+            url: o,
+            ...r
+          } = t;
+          this.got[s](o, r).then(t => {
+            const {
+                statusCode: s,
+                statusCode: o,
+                headers: r,
+                rawBody: a
+              } = t,
+              n = i.decode(a, this.encoding);
+            e(null, {
+              status: s,
+              statusCode: o,
+              headers: r,
+              rawBody: a,
+              body: n
+            }, n);
+          }, t => {
+            const {
+              message: s,
+              response: o
+            } = t;
+            e(s, o, o && i.decode(o.rawBody, this.encoding));
+          });
+          break;
+      }
+    }
+    time(t, e = null) {
+      const s = e ? new Date(e) : new Date();
+      let i = {
+        "M+": s.getMonth() + 1,
+        "d+": s.getDate(),
+        "H+": s.getHours(),
+        "m+": s.getMinutes(),
+        "s+": s.getSeconds(),
+        "q+": Math.floor((s.getMonth() + 3) / 3),
+        S: s.getMilliseconds()
+      };
+      /(y+)/.test(t) && (t = t.replace(RegExp.$1, (s.getFullYear() + "").substr(4 - RegExp.$1.length)));
+      for (let e in i) new RegExp("(" + e + ")").test(t) && (t = t.replace(RegExp.$1, 1 == RegExp.$1.length ? i[e] : ("00" + i[e]).substr(("" + i[e]).length)));
+      return t;
+    }
+    queryStr(t) {
+      let e = "";
+      for (const s in t) {
+        let i = t[s];
+        null != i && "" !== i && ("object" == typeof i && (i = JSON.stringify(i)), e += `${s}=${i}&`);
+      }
+      return e = e.substring(0, e.length - 1), e;
+    }
+    msg(e = t, s = "", i = "", o = {}) {
+      const r = t => {
+        const {
+          $open: e,
+          $copy: s,
+          $media: i,
+          $mediaMime: o
+        } = t;
+        switch (typeof t) {
+          case void 0:
+            return t;
+          case "string":
+            switch (this.getEnv()) {
+              case "Surge":
+              case "Stash":
+              default:
+                return {
+                  url: t
+                };
+              case "Loon":
+              case "Shadowrocket":
+                return t;
+              case "Quantumult X":
+                return {
+                  "open-url": t
+                };
+              case "Node.js":
+                return;
+            }
+          case "object":
+            switch (this.getEnv()) {
+              case "Surge":
+              case "Stash":
+              case "Shadowrocket":
+              default:
+                {
+                  const r = {};
+                  let a = t.openUrl || t.url || t["open-url"] || e;
+                  a && Object.assign(r, {
+                    action: "open-url",
+                    url: a
+                  });
+                  let n = t["update-pasteboard"] || t.updatePasteboard || s;
+                  if (n && Object.assign(r, {
+                    action: "clipboard",
+                    text: n
+                  }), i) {
+                    let t, e, s;
+                    if (i.startsWith("http")) t = i;else if (i.startsWith("data:")) {
+                      const [t] = i.split(";"),
+                        [, o] = i.split(",");
+                      e = o, s = t.replace("data:", "");
+                    } else {
+                      e = i, s = (t => {
+                        const e = {
+                          JVBERi0: "application/pdf",
+                          R0lGODdh: "image/gif",
+                          R0lGODlh: "image/gif",
+                          iVBORw0KGgo: "image/png",
+                          "/9j/": "image/jpg"
+                        };
+                        for (var s in e) if (0 === t.indexOf(s)) return e[s];
+                        return null;
+                      })(i);
+                    }
+                    Object.assign(r, {
+                      "media-url": t,
+                      "media-base64": e,
+                      "media-base64-mime": o ?? s
+                    });
+                  }
+                  return Object.assign(r, {
+                    "auto-dismiss": t["auto-dismiss"],
+                    sound: t.sound
+                  }), r;
+                }
+              case "Loon":
+                {
+                  const s = {};
+                  let o = t.openUrl || t.url || t["open-url"] || e;
+                  o && Object.assign(s, {
+                    openUrl: o
+                  });
+                  let r = t.mediaUrl || t["media-url"];
+                  return i?.startsWith("http") && (r = i), r && Object.assign(s, {
+                    mediaUrl: r
+                  }), console.log(JSON.stringify(s)), s;
+                }
+              case "Quantumult X":
+                {
+                  const o = {};
+                  let r = t["open-url"] || t.url || t.openUrl || e;
+                  r && Object.assign(o, {
+                    "open-url": r
+                  });
+                  let a = t["media-url"] || t.mediaUrl;
+                  i?.startsWith("http") && (a = i), a && Object.assign(o, {
+                    "media-url": a
+                  });
+                  let n = t["update-pasteboard"] || t.updatePasteboard || s;
+                  return n && Object.assign(o, {
+                    "update-pasteboard": n
+                  }), console.log(JSON.stringify(o)), o;
+                }
+              case "Node.js":
+                return;
+            }
+          default:
+            return;
+        }
+      };
+      if (!this.isMute) switch (this.getEnv()) {
+        case "Surge":
+        case "Loon":
+        case "Stash":
+        case "Shadowrocket":
+        default:
+          $notification.post(e, s, i, r(o));
+          break;
+        case "Quantumult X":
+          $notify(e, s, i, r(o));
+          break;
+        case "Node.js":
+          break;
+      }
+      if (!this.isMuteLog) {
+        let t = ["", "==============\uD83D\uDCE3\u7CFB\u7EDF\u901A\u77E5\uD83D\uDCE3=============="];
+        t.push(e), s && t.push(s), i && t.push(i), console.log(t.join("\n")), this.logs = this.logs.concat(t);
+      }
+    }
+    debug(...t) {
+      this.logLevels[this.logLevel] <= this.logLevels.debug && (t.length > 0 && (this.logs = [...this.logs, ...t]), console.log(`${this.logLevelPrefixs.debug}${t.map(t => t ?? String(t)).join(this.logSeparator)}`));
+    }
+    info(...t) {
+      this.logLevels[this.logLevel] <= this.logLevels.info && (t.length > 0 && (this.logs = [...this.logs, ...t]), console.log(`${this.logLevelPrefixs.info}${t.map(t => t ?? String(t)).join(this.logSeparator)}`));
+    }
+    warn(...t) {
+      this.logLevels[this.logLevel] <= this.logLevels.warn && (t.length > 0 && (this.logs = [...this.logs, ...t]), console.log(`${this.logLevelPrefixs.warn}${t.map(t => t ?? String(t)).join(this.logSeparator)}`));
+    }
+    error(...t) {
+      this.logLevels[this.logLevel] <= this.logLevels.error && (t.length > 0 && (this.logs = [...this.logs, ...t]), console.log(`${this.logLevelPrefixs.error}${t.map(t => t ?? String(t)).join(this.logSeparator)}`));
+    }
+    log(...t) {
+      t.length > 0 && (this.logs = [...this.logs, ...t]), console.log(t.map(t => t ?? String(t)).join(this.logSeparator));
+    }
+    logErr(t, e) {
+      switch (this.getEnv()) {
+        case "Surge":
+        case "Loon":
+        case "Stash":
+        case "Shadowrocket":
+        case "Quantumult X":
+        default:
+          this.log("", `❗️${this.name}, 错误!`, e, t);
+          break;
+        case "Node.js":
+          this.log("", `❗️${this.name}, 错误!`, e, void 0 !== t.message ? t.message : t, t.stack);
+          break;
+      }
+    }
+    wait(t) {
+      return new Promise(e => setTimeout(e, t));
+    }
+    done(t = {}) {
+      const e = (new Date().getTime() - this.startTime) / 1000;
+      switch (this.log("", `🔔${this.name}, 结束! 🕛 ${e} 秒`), this.log(), this.getEnv()) {
+        case "Surge":
+        case "Loon":
+        case "Stash":
+        case "Shadowrocket":
+        case "Quantumult X":
+        default:
+          $done(t);
+          break;
+        case "Node.js":
+          process.exit(1);
+      }
+    }
+  }(t, e);
+}
